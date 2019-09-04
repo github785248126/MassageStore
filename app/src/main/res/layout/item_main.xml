@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/lin_main"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:gravity="center"
+            android:text="按摩"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:gravity="center"
+            android:text="60min"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/price"
+            android:gravity="center"
+            android:text="￥158"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/remarks"
+            android:gravity="center"
+            android:text="128/98/58"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_below="@+id/lin_main"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginHorizontal="80dp"
+        android:background="#99FFFFFF"/>
+</RelativeLayout>

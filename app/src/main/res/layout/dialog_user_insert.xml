@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:layout_width="400dp"
+    android:layout_height="400dp">
+
+    <RelativeLayout
+        android:id="@+id/toolbar_user_insert"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:text="@string/insert_user"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/back_user_insert"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:focusable="false"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/save_user_insert"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/save" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/toolbar_user_insert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/tv_user_dialog_name"
+                android:text="@string/project_name"
+                android:gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/edit_project_dialog_name"
+                android:background="@color/white"
+                android:hint="@string/edit_name"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_toRightOf="@+id/tv_user_dialog_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="1px"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/tv_project_dialog_price"
+                android:text="@string/phone"
+                android:gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/edit_user_dialog_phone"
+                android:background="@color/white"
+                android:hint="@string/edit_phone"
+                android:inputType="phone"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_toRightOf="@+id/tv_project_dialog_price"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
