@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.massagestore.R;
 import com.example.massagestore.adapter.MemberAdapterSearch;
@@ -23,12 +22,10 @@ import com.example.massagestore.base.BaseDialog;
 import com.example.massagestore.dao.DaoMaster;
 import com.example.massagestore.dao.DaoSession;
 import com.example.massagestore.dao.MemberDBDao;
-import com.example.massagestore.dao.ProjectDBDao;
 import com.example.massagestore.dao.UserDBDao;
 import com.example.massagestore.dao.entity.MemberDB;
 import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.dao.entity.UserDB;
-
 import java.util.ArrayList;
 import java.util.List;
 
