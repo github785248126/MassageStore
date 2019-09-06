@@ -1,14 +1,26 @@
 package com.example.massagestore.ui.member.dialog;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-
 import com.example.massagestore.R;
 import com.example.massagestore.base.BaseDialog;
+import com.example.massagestore.dao.DaoMaster;
+import com.example.massagestore.dao.DaoSession;
+import com.example.massagestore.dao.MemberDBDao;
+import com.example.massagestore.dao.entity.MemberDB;
+import com.example.massagestore.eventbus.EventCode;
+import com.example.massagestore.eventbus.EventMessage;
+import com.example.massagestore.util.EventBusUtil;
+import com.example.massagestore.util.ToastUtils;
+
+import java.util.List;
 
 /**
  * 创建日期：2019/9/4
@@ -27,6 +39,8 @@ public class InsertMemberDialog extends BaseDialog implements View.OnClickListen
     private RadioButton radio2;
     private RadioButton radio3;
     private RadioButton radio4;
+    private MemberDBDao memberDBDao;
+    private String level;
     private Context context;
 
     public InsertMemberDialog(@NonNull Context context) {
@@ -34,9 +48,13 @@ public class InsertMemberDialog extends BaseDialog implements View.OnClickListen
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void init() {
-        radio1.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+        level = "LV1";
+        radio1.setBackground(context.getDrawable(R.mipmap.v1_check));
+        DaoSession daoSession = DaoMaster.newDevSession(context, MemberDBDao.TABLENAME);
+        memberDBDao = daoSession.getMemberDBDao();
     }
 
     @Override
@@ -58,8 +76,13 @@ public class InsertMemberDialog extends BaseDialog implements View.OnClickListen
         radio4 = findViewById(R.id.radio_v4);
         back.setOnClickListener(this);
         save.setOnClickListener(this);
+        radio1.setOnClickListener(this);
+        radio2.setOnClickListener(this);
+        radio3.setOnClickListener(this);
+        radio4.setOnClickListener(this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -67,19 +90,56 @@ public class InsertMemberDialog extends BaseDialog implements View.OnClickListen
                 dismiss();
                 break;
             case R.id.save_member_insert:
-
+                String name = editName.getText().toString();
+                String phone = editPhone.getText().toString();
+                String price = editPrice.getText().toString();
+                String remarks = editRemarks.getText().toString();
+                if (TextUtils.isEmpty(name)){
+                    ToastUtils.showTextLong("请输入会员名");
+                } else if (TextUtils.isEmpty(phone)){
+                    ToastUtils.showTextLong("请输入手机号码");
+                } else if (TextUtils.isEmpty(price)){
+                    ToastUtils.showTextLong("请输入充值金额");
+                } else {
+                    //  查询数据库是否存在该会员
+                    List<MemberDB> queryBuilder = memberDBDao.queryBuilder().where(MemberDBDao.Properties.Name.eq(name)).list();
+                    if (null != queryBuilder && queryBuilder.size() > 0){
+                        ToastUtils.showTextLong("会员已存在");
+                    }else {
+                        memberDBDao.insert(new MemberDB(null,name,phone,price,level,remarks));
+                        EventBusUtil.sendStickyEvent(new EventMessage(EventCode.MemberListFragment_UPDATE));
+                        ToastUtils.showTextLong("保存成功");
+                        dismiss();
+                    }
+                }
                 break;
             case R.id.radio_v1:
-                radio1.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                level = "LV1";
+                radio1.setBackground(context.getDrawable(R.mipmap.v1_check));
+                radio2.setBackground(context.getDrawable(R.mipmap.v2));
+                radio3.setBackground(context.getDrawable(R.mipmap.v3));
+                radio4.setBackground(context.getDrawable(R.mipmap.v4));
                 break;
             case R.id.radio_v2:
-                radio2.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                level = "LV2";
+                radio2.setBackground(context.getDrawable(R.mipmap.v2_check));
+                radio1.setBackground(context.getDrawable(R.mipmap.v1));
+                radio3.setBackground(context.getDrawable(R.mipmap.v3));
+                radio4.setBackground(context.getDrawable(R.mipmap.v4));
                 break;
             case R.id.radio_v3:
-                radio3.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                level = "LV3";
+                radio3.setBackground(context.getDrawable(R.mipmap.v3_check));
+                radio1.setBackground(context.getDrawable(R.mipmap.v1));
+                radio2.setBackground(context.getDrawable(R.mipmap.v2));
+                radio4.setBackground(context.getDrawable(R.mipmap.v4));
                 break;
             case R.id.radio_v4:
-                radio4.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                level = "LV4";
+                radio4.setBackground(context.getDrawable(R.mipmap.v4_check));
+                radio1.setBackground(context.getDrawable(R.mipmap.v1));
+                radio2.setBackground(context.getDrawable(R.mipmap.v2));
+                radio3.setBackground(context.getDrawable(R.mipmap.v3));
                 break;
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
     android:layout_width="500dp"
     android:layout_height="400dp">
 
@@ -57,9 +58,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="1px"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginTop="1px"
             android:background="@color/white">
 
             <TextView
@@ -67,7 +68,7 @@
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="时间"/>
+                android:text="时间" />
 
             <TextView
                 android:id="@+id/details_time"
@@ -80,49 +81,75 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="1px"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginTop="1px"
             android:background="@color/white">
 
             <RadioGroup
-                android:orientation="horizontal"
-                android:layout_marginVertical="3dp"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_marginVertical="3dp"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/button1_details"
-                    android:text="散客"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/click_radio_button"
                     android:button="@null"
                     android:checked="true"
-                    android:textColor="@color/white"
-                    android:background="@drawable/click_button"
-                    android:layout_width="80dp"
                     android:gravity="center"
-                    android:layout_height="match_parent" />
+                    android:text="散客"
+                    android:textColor="@color/white" />
 
                 <RadioButton
                     android:id="@+id/button2_details"
-                    android:layout_marginStart="30dp"
-                    android:background="@drawable/click_button"
-                    android:text="会员"
-                    android:gravity="center"
-                    android:button="@null"
-                    android:textColor="@color/white"
-                    android:layout_toRightOf="@+id/button1_details"
                     android:layout_width="80dp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="30dp"
+                    android:layout_toRightOf="@+id/button1_details"
+                    android:background="@drawable/click_radio_button"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="会员"
+                    android:textColor="@color/white" />
 
             </RadioGroup>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="1px"
+            android:id="@+id/rel_member"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginTop="1px"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_details_member"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="会员" />
+
+            <EditText
+                android:id="@+id/details_member"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/tv_details_member"
+                android:background="@color/white"
+                android:hint="手机号或姓名"
+                android:gravity="center"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="1px"
             android:background="@color/white">
 
             <TextView
@@ -130,9 +157,9 @@
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="售价"/>
+                android:text="售价" />
 
-            <TextView
+            <EditText
                 android:id="@+id/details_price"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -143,20 +170,21 @@
 
             <TextView
                 android:id="@+id/edit_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:padding="@dimen/dp_10"
                 android:text="修改"
                 android:textColor="@color/colorAccent"
-                android:textSize="10sp"
-                android:padding="@dimen/dp_10"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:textSize="10sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="1px"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginTop="1px"
+            android:layout_marginBottom="1px"
             android:background="@color/white">
 
             <TextView
@@ -164,27 +192,37 @@
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="技师"/>
+                android:text="技师" />
 
-            <TextView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/details_user"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="点击选择技师"
                 android:layout_toRightOf="@+id/tv_details_user"
                 android:background="@color/white"
-                android:gravity="center"
                 android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_search"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="66dp" />
+
     <Button
         android:id="@+id/button"
-        android:background="@drawable/check_button"
-        android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:text="确认"
         android:layout_width="120dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/check_button"
+        android:text="确认"
+        android:layout_margin="20dp"
+        android:textColor="@color/white" />
 </RelativeLayout>

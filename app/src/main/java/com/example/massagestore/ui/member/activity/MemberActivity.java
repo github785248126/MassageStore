@@ -14,6 +14,7 @@ import com.example.massagestore.dao.MemberDBDao;
 import com.example.massagestore.ui.member.fragment.MemberFragment;
 import com.example.massagestore.ui.project.fragment.ProjectListFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +32,6 @@ public class MemberActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void init() {
         initPager();
-        DaoSession daoSession = DaoMaster.newDevSession(this, MemberDBDao.TABLENAME);
-        memberDBDao = daoSession.getMemberDBDao();
     }
 
     @Override
@@ -41,6 +40,8 @@ public class MemberActivity extends BaseActivity implements View.OnClickListener
         tableLayout = findViewById(R.id.tab_member);
         viewPager = findViewById(R.id.pager_member);
         back.setOnClickListener(this);
+        titleList = new ArrayList<>();
+        frameLayoutList = new ArrayList<>();
     }
 
     private void initPager() {

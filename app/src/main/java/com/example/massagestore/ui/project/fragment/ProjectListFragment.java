@@ -106,7 +106,7 @@ public class ProjectListFragment extends BaseFragment implements View.OnClickLis
     public void onEventBus(EventMessage event) {
         switch (event.getCode()) {
             case EventCode.ProjectListFragment_UPDATE:
-                db_updata();
+                projectAdapter.setNewData(projectDBDao.loadAll());
                 break;
         }
     }
@@ -114,11 +114,5 @@ public class ProjectListFragment extends BaseFragment implements View.OnClickLis
     @Override
     protected boolean isRegisterEventBus() {
         return true;
-    }
-
-    private void db_updata() {
-        list.clear();
-        list.addAll(projectDBDao.loadAll());
-        projectAdapter.notifyDataSetChanged();
     }
 }

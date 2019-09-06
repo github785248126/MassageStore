@@ -3,6 +3,7 @@ package com.example.massagestore.dao.entity;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by 老表 on 2019/8/31.
@@ -13,6 +14,17 @@ public class UserDB {
     private Long id;
     private String name;
     private String phone;
+    @Transient
+    private boolean isCheck;
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
+
     @Generated(hash = 247474434)
     public UserDB(Long id, String name, String phone) {
         this.id = id;

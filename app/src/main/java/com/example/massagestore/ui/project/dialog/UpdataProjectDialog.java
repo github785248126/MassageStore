@@ -31,6 +31,7 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
     private EditText editName;
     private AmountEditText editPrice;
     private AmountEditText editCommission;
+    private EditText editTime;
     private ProjectDBDao projectDBDao;
     private ProjectDB projectDB;
     private Context context;
@@ -45,10 +46,10 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
     protected void init() {
         DaoSession daoSession = DaoMaster.newDevSession(context, ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
-//        projectDB = projectDBDao.queryBuilder().where(ProjectDBDao.Properties.Name.eq(projectDB.getName())).unique();
 
         editName.setText(projectDB.getName());
         editPrice.setText(projectDB.getPrice());
+        editTime.setText(projectDB.getTime());
         editCommission.setText(projectDB.getCommission());
     }
 
@@ -64,10 +65,10 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
         editName = findViewById(R.id.edit_project_dialog_name);
         editPrice = findViewById(R.id.edit_project_dialog_price);
         editCommission = findViewById(R.id.edit_project_dialog_commission);
+        editTime = findViewById(R.id.edit_project_dialog_time);
 
         back.setOnClickListener(this);
         save.setOnClickListener(this);
-
     }
 
     @Override
@@ -80,6 +81,7 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
                 String name = editName.getText().toString().trim();
                 String price = editPrice.getText().toString().trim();
                 String commission = editCommission.getText().toString().trim();
+                String time = editTime.getText().toString().trim();
                 //  插入到数据库
                 if (TextUtils.isEmpty(name)){
                     ToastUtils.showTextLong("请输入名称");
@@ -91,6 +93,7 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
                     projectDB.setName(name);
                     projectDB.setPrice(price);
                     projectDB.setCommission(commission);
+                    projectDB.setTime(time);
                     projectDBDao.update(projectDB);
 
                     EventBusUtil.sendStickyEvent(new EventMessage(EventCode.ProjectListFragment_UPDATE));

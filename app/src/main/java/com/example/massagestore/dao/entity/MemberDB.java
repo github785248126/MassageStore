@@ -17,14 +17,17 @@ public class MemberDB {
     private String phone;
     private String price;   //  卡余额
     private String level;   //  会员级别
-    @Generated(hash = 1174396259)
-    public MemberDB(Long id, String name, String phone, String price,
-            String level) {
+    private String remarks;   //  会员级别
+
+    @Generated(hash = 675000783)
+    public MemberDB(Long id, String name, String phone, String price, String level,
+            String remarks) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.price = price;
         this.level = level;
+        this.remarks = remarks;
     }
     @Generated(hash = 1431404536)
     public MemberDB() {
@@ -58,5 +61,11 @@ public class MemberDB {
     }
     public void setLevel(String level) {
         this.level = level;
+    }
+    public String getRemarks() {
+        return this.remarks;
+    }
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

@@ -29,6 +29,7 @@ public class MemberDBDao extends AbstractDao<MemberDB, Long> {
         public final static Property Phone = new Property(2, String.class, "phone", false, "PHONE");
         public final static Property Price = new Property(3, String.class, "price", false, "PRICE");
         public final static Property Level = new Property(4, String.class, "level", false, "LEVEL");
+        public final static Property Remarks = new Property(5, String.class, "remarks", false, "REMARKS");
     }
 
 
@@ -48,7 +49,8 @@ public class MemberDBDao extends AbstractDao<MemberDB, Long> {
                 "\"NAME\" TEXT," + // 1: name
                 "\"PHONE\" TEXT," + // 2: phone
                 "\"PRICE\" TEXT," + // 3: price
-                "\"LEVEL\" TEXT);"); // 4: level
+                "\"LEVEL\" TEXT," + // 4: level
+                "\"REMARKS\" TEXT);"); // 5: remarks
     }
 
     /** Drops the underlying database table. */
@@ -85,6 +87,11 @@ public class MemberDBDao extends AbstractDao<MemberDB, Long> {
         if (level != null) {
             stmt.bindString(5, level);
         }
+ 
+        String remarks = entity.getRemarks();
+        if (remarks != null) {
+            stmt.bindString(6, remarks);
+        }
     }
 
     @Override
@@ -115,6 +122,11 @@ public class MemberDBDao extends AbstractDao<MemberDB, Long> {
         if (level != null) {
             stmt.bindString(5, level);
         }
+ 
+        String remarks = entity.getRemarks();
+        if (remarks != null) {
+            stmt.bindString(6, remarks);
+        }
     }
 
     @Override
@@ -129,7 +141,8 @@ public class MemberDBDao extends AbstractDao<MemberDB, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // phone
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // price
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // level
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // level
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // remarks
         );
         return entity;
     }
@@ -141,6 +154,7 @@ public class MemberDBDao extends AbstractDao<MemberDB, Long> {
         entity.setPhone(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPrice(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setLevel(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setRemarks(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override
