@@ -22,11 +22,17 @@ import com.example.massagestore.base.BaseDialog;
 import com.example.massagestore.dao.DaoMaster;
 import com.example.massagestore.dao.DaoSession;
 import com.example.massagestore.dao.MemberDBDao;
+import com.example.massagestore.dao.OrderDBDao;
 import com.example.massagestore.dao.UserDBDao;
 import com.example.massagestore.dao.entity.MemberDB;
+import com.example.massagestore.dao.entity.OrderDB;
 import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.dao.entity.UserDB;
+import com.example.massagestore.util.ToastUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,7 +40,6 @@ import java.util.List;
  */
 
 public class DetailsDialog extends BaseDialog implements View.OnClickListener {
-
     private ImageView back_details;
     private TextView details_name;
     private TextView details_time;
@@ -48,6 +53,7 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
     private ProjectDB projectDB;
     private RelativeLayout relMember;
     private RecyclerView recycle_search;
+    private RelativeLayout member;
 
     private MemberAdapterSearch memberAdapterSearch;
     private UserListAdapter userListAdapter;
@@ -57,6 +63,11 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
     private MemberDBDao memberDBDao;
     private UserDBDao userDBDao;
     private Context context;
+    private TextWatcher textWatcher;
+    private String isMember = "0";
+    private String userName = null;
+    private OrderDBDao orderDBDao;
+    private String ys_price;
 
     public DetailsDialog(@NonNull Context context, ProjectDB projectDB) {
         super(context);
@@ -66,9 +77,11 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     protected void init() {
+        details_price.setEnabled(false);
         details_name.setText(projectDB.getName());
         details_time.setText(projectDB.getTime() + "分钟");
         details_price.setText(projectDB.getPrice());
+        ys_price = projectDB.getPrice();
 
         initDataBase();
         initRecycle();
@@ -83,6 +96,9 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
         DaoSession daoSession2 = DaoMaster.newDevSession(context, UserDBDao.TABLENAME);
         userDBDao = daoSession2.getUserDBDao();
         userDBList.addAll(userDBDao.loadAll());
+
+        DaoSession daoSession3 = DaoMaster.newDevSession(context, OrderDBDao.TABLENAME);
+        orderDBDao = daoSession3.getOrderDBDao();
     }
 
     private void initRecycle() {
@@ -114,6 +130,7 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
         relMember = findViewById(R.id.rel_member);
         details_member = findViewById(R.id.details_member);
         recycle_search = findViewById(R.id.recycle_search);
+        member = findViewById(R.id.member);
 
         back_details.setOnClickListener(this);
         button1_details.setOnClickListener(this);
@@ -129,25 +146,35 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.button1_details:  //  散客
+                isMember = "0";
                 relMember.setVisibility(View.GONE);
                 break;
             case R.id.button2_details:  //  会员
+                isMember = "1";
                 relMember.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_price:
-
-                break;
-            case R.id.details_user:
-
+                details_price.setEnabled(true);
                 break;
             case R.id.button:
+                String projectName = details_name.getText().toString();
+                String projectMember = details_member.getText().toString();
+                String projectPrice = details_price.getText().toString();
 
+                if (isMember.equals("1") && TextUtils.isEmpty(projectMember)){
+                    ToastUtils.showTextLong("请输入会员");
+                }else if (TextUtils.isEmpty(projectPrice)){
+                    ToastUtils.showTextLong("金额不能为空");
+                }else {
+                    orderDBDao.insert(new OrderDB(null,getOrderId(),projectName,projectMember,userName,ys_price,projectPrice));
+                    ToastUtils.showTextLong("订单已保存");
+                }
                 break;
         }
     }
 
     private void initListener() {
-        details_member.addTextChangedListener(new TextWatcher() {
+        textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -162,12 +189,13 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
             public void afterTextChanged(Editable s) {
                 String edit = s.toString();
                 if (TextUtils.isEmpty(edit)) {
-                    recycle_search.setVisibility(View.GONE);
+                    member.setVisibility(View.GONE);
                 } else {
                     memberAdapterSearch.getFilter().filter(edit);
                 }
             }
-        });
+        };
+        details_member.addTextChangedListener(textWatcher);
 
         memberAdapterSearch.setOnClickListener(new MemberAdapterSearch.OnClickListener() {
             @Override
@@ -175,15 +203,17 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
                 memberSearchList.clear();
                 memberSearchList.addAll(resultBeans);
                 memberAdapterSearch.setNewData(resultBeans);
-                recycle_search.setVisibility(View.VISIBLE);
+                member.setVisibility(View.VISIBLE);
             }
         });
 
         memberAdapterSearch.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                details_member.removeTextChangedListener(textWatcher);
                 details_member.setText(memberSearchList.get(position).getName());
-                recycle_search.setVisibility(View.GONE);
+                details_member.addTextChangedListener(textWatcher);
+                member.setVisibility(View.GONE);
             }
         });
 
@@ -192,14 +222,27 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 UserDB userDB = userDBList.get(position);
                 if (userDB.isCheck()){
+                    userName = "";
                     userDB.setCheck(false);
                 }else {
+                    for (int i = 0; i < userDBList.size(); i++) {
+                        if (i == position){
+                            userDBList.get(i).setCheck(true);
+                        }else {
+                            userDBList.get(i).setCheck(false);
+                        }
+                    }
                     userDB.setCheck(true);
-//                    for (int i = 0; i < userDBList; i++) {
-//
-//                    }
+                    userName = userDB.getName();
                 }
+                userListAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private String getOrderId(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
+        String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+        return date;
     }
 }

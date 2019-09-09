@@ -2,34 +2,35 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="30dp">
 
     <LinearLayout
         android:id="@+id/lin"
         android:gravity="center"
         android:padding="5dp"
+        android:weightSum="2"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/memberName"
-            android:text="王一"
-            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/memberPhone"
-            android:text="18811112222"
-            android:layout_marginStart="20dp"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
     <View
         android:layout_below="@+id/lin"
         android:background="@color/theme_black"
-        android:layout_marginHorizontal="100dp"
         android:layout_width="match_parent"
         android:layout_height="1px"/>
 </RelativeLayout>

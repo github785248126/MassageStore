@@ -128,5 +128,16 @@
             android:button="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/rb_list_main"
+            android:gravity="center"
+            android:drawableTop="@drawable/member"
+            android:padding="20dp"
+            android:text="订单列表"
+            android:textColor="@color/white"
+            android:button="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </RadioGroup>
 </RelativeLayout>

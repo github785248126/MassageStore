@@ -9,10 +9,12 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.example.massagestore.dao.entity.MemberDB;
+import com.example.massagestore.dao.entity.OrderDB;
 import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.dao.entity.UserDB;
 
 import com.example.massagestore.dao.MemberDBDao;
+import com.example.massagestore.dao.OrderDBDao;
 import com.example.massagestore.dao.ProjectDBDao;
 import com.example.massagestore.dao.UserDBDao;
 
@@ -26,10 +28,12 @@ import com.example.massagestore.dao.UserDBDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig memberDBDaoConfig;
+    private final DaoConfig orderDBDaoConfig;
     private final DaoConfig projectDBDaoConfig;
     private final DaoConfig userDBDaoConfig;
 
     private final MemberDBDao memberDBDao;
+    private final OrderDBDao orderDBDao;
     private final ProjectDBDao projectDBDao;
     private final UserDBDao userDBDao;
 
@@ -40,6 +44,9 @@ public class DaoSession extends AbstractDaoSession {
         memberDBDaoConfig = daoConfigMap.get(MemberDBDao.class).clone();
         memberDBDaoConfig.initIdentityScope(type);
 
+        orderDBDaoConfig = daoConfigMap.get(OrderDBDao.class).clone();
+        orderDBDaoConfig.initIdentityScope(type);
+
         projectDBDaoConfig = daoConfigMap.get(ProjectDBDao.class).clone();
         projectDBDaoConfig.initIdentityScope(type);
 
@@ -47,22 +54,29 @@ public class DaoSession extends AbstractDaoSession {
         userDBDaoConfig.initIdentityScope(type);
 
         memberDBDao = new MemberDBDao(memberDBDaoConfig, this);
+        orderDBDao = new OrderDBDao(orderDBDaoConfig, this);
         projectDBDao = new ProjectDBDao(projectDBDaoConfig, this);
         userDBDao = new UserDBDao(userDBDaoConfig, this);
 
         registerDao(MemberDB.class, memberDBDao);
+        registerDao(OrderDB.class, orderDBDao);
         registerDao(ProjectDB.class, projectDBDao);
         registerDao(UserDB.class, userDBDao);
     }
     
     public void clear() {
         memberDBDaoConfig.clearIdentityScope();
+        orderDBDaoConfig.clearIdentityScope();
         projectDBDaoConfig.clearIdentityScope();
         userDBDaoConfig.clearIdentityScope();
     }
 
     public MemberDBDao getMemberDBDao() {
         return memberDBDao;
+    }
+
+    public OrderDBDao getOrderDBDao() {
+        return orderDBDao;
     }
 
     public ProjectDBDao getProjectDBDao() {

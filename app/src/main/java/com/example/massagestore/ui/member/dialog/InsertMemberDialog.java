@@ -28,7 +28,6 @@ import java.util.List;
  * QQ:785248126
  */
 public class InsertMemberDialog extends BaseDialog implements View.OnClickListener{
-
     private ImageView back;
     private ImageView save;
     private EditText editName;

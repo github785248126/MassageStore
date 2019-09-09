@@ -64,6 +64,11 @@ public class MemberFragment extends BaseFragment implements View.OnClickListener
         list = memberDBDao.loadAll();
     }
 
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
+
     private void initRecycle() {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),4));
         memberAdapter = new MemberAdapter(R.layout.item_member,list);
