@@ -1,9 +1,9 @@
 package com.example.massagestore.ui.main;
 
 import android.content.Intent;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -11,16 +11,15 @@ import android.widget.RadioGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.massagestore.R;
 import com.example.massagestore.adapter.MainAdapter;
-import com.example.massagestore.adapter.ProjectAdapter;
 import com.example.massagestore.base.BaseActivity;
 import com.example.massagestore.dao.DaoMaster;
 import com.example.massagestore.dao.DaoSession;
 import com.example.massagestore.dao.ProjectDBDao;
 import com.example.massagestore.dao.entity.ProjectDB;
+import com.example.massagestore.ui.OrderActivity;
 import com.example.massagestore.ui.user.activity.UserActivity;
 import com.example.massagestore.ui.member.activity.MemberActivity;
 import com.example.massagestore.ui.project.activity.ProjectActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RadioButton rbProject;
     private RadioButton rbArtificer;
     private RadioButton rbMember;
+    private RadioButton rbOrder;
     private RadioGroup radioGroup;
     private MainAdapter mainAdapter;
     private List<ProjectDB> projectDBList = new ArrayList<>();
@@ -54,8 +54,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initData() {
         DaoSession daoSession = DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
-        projectDBDao.loadAll();
-//        projectDBList.addAll();
+        if (null == projectDBList || projectDBList.size() == 0){
+            projectDBList.addAll(projectDBDao.loadAll());
+        }
     }
 
     private void initRecycle() {
@@ -76,12 +77,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         rbProject = (RadioButton) findViewById(R.id.rb_project_main);
         rbArtificer = (RadioButton) findViewById(R.id.rb_artificer_main);
         rbMember = (RadioButton) findViewById(R.id.rb_member_main);
+        rbOrder = (RadioButton) findViewById(R.id.rb_list_main);
         radioGroup = (RadioGroup) findViewById(R.id.rg_main);
 
         menu.setOnClickListener(this);
         rbProject.setOnClickListener(this);
         rbArtificer.setOnClickListener(this);
         rbMember.setOnClickListener(this);
+        rbOrder.setOnClickListener(this);
     }
 
     @Override
@@ -95,13 +98,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.rb_project_main:
+                radioGroup.setVisibility(View.GONE);
                 jumpActivity(ProjectActivity.class);
                 break;
             case R.id.rb_artificer_main:
+                radioGroup.setVisibility(View.GONE);
                 jumpActivity(UserActivity.class);
                 break;
             case R.id.rb_member_main:
+                radioGroup.setVisibility(View.GONE);
                 jumpActivity(MemberActivity.class);
+                break;
+            case R.id.rb_list_main:
+                radioGroup.setVisibility(View.GONE);
+                jumpActivity(OrderActivity.class);
                 break;
         }
     }

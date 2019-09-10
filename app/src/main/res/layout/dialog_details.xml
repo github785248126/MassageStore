@@ -130,7 +130,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="1px"
                 android:background="@color/white"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_details_member"
@@ -193,8 +193,10 @@
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@+id/tv_details_price"
                     android:background="@color/white"
+                    android:textColorHint="@color/red"
                     android:gravity="center"
-                    android:textSize="12sp" />
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/edit_price"

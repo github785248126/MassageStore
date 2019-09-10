@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.massagestore.R;
 import com.example.massagestore.adapter.MemberAdapterSearch;
@@ -28,7 +30,10 @@ import com.example.massagestore.dao.entity.MemberDB;
 import com.example.massagestore.dao.entity.OrderDB;
 import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.dao.entity.UserDB;
+import com.example.massagestore.util.AmountUtils;
 import com.example.massagestore.util.ToastUtils;
+
+import org.greenrobot.eventbus.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +59,6 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
     private RelativeLayout relMember;
     private RecyclerView recycle_search;
     private RelativeLayout member;
-
     private MemberAdapterSearch memberAdapterSearch;
     private UserListAdapter userListAdapter;
     private List<MemberDB> memberDBList = new ArrayList<>();
@@ -77,10 +81,10 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     protected void init() {
-        details_price.setEnabled(false);
+        details_price.setCursorVisible(false);
         details_name.setText(projectDB.getName());
         details_time.setText(projectDB.getTime() + "分钟");
-        details_price.setText(projectDB.getPrice());
+        details_price.setText(AmountUtils.formatMoney(projectDB.getPrice()));
         ys_price = projectDB.getPrice();
 
         initDataBase();
@@ -106,7 +110,7 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
         memberAdapterSearch = new MemberAdapterSearch(R.layout.item_member_search, memberDBList);
         recycle_search.setAdapter(memberAdapterSearch);
 
-        recycler_user.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
+        recycler_user.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         userListAdapter = new UserListAdapter(R.layout.item_user_list, userDBList);
         recycler_user.setAdapter(userListAdapter);
     }
@@ -154,19 +158,20 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
                 relMember.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_price:
-                details_price.setEnabled(true);
+                details_price.setCursorVisible(true);
                 break;
             case R.id.button:
                 String projectName = details_name.getText().toString();
                 String projectMember = details_member.getText().toString();
                 String projectPrice = details_price.getText().toString();
 
-                if (isMember.equals("1") && TextUtils.isEmpty(projectMember)){
+                if (isMember.equals("1") && TextUtils.isEmpty(projectMember)) {
                     ToastUtils.showTextLong("请输入会员");
-                }else if (TextUtils.isEmpty(projectPrice)){
+                } else if (TextUtils.isEmpty(projectPrice)) {
                     ToastUtils.showTextLong("金额不能为空");
-                }else {
-                    orderDBDao.insert(new OrderDB(null,getOrderId(),projectName,projectMember,userName,ys_price,projectPrice));
+                } else {
+                    Log.e("--------->>>",new OrderDB(null, getOrderId(), projectName, projectMember, userName, ys_price, AmountUtils.formatMoney(projectPrice)).toString());
+                    orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName, ys_price, AmountUtils.formatMoney(projectPrice)));
                     ToastUtils.showTextLong("订单已保存");
                 }
                 break;
@@ -214,6 +219,25 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
                 details_member.setText(memberSearchList.get(position).getName());
                 details_member.addTextChangedListener(textWatcher);
                 member.setVisibility(View.GONE);
+
+                switch (memberSearchList.get(position).getLevel()){
+                    case "LV1":
+                        details_price.setText(AmountUtils.formatMoney(projectDB.getV1()));
+                        ys_price = projectDB.getV1();
+                        break;
+                    case "LV2":
+                        details_price.setText(AmountUtils.formatMoney(projectDB.getV2()));
+                        ys_price = projectDB.getV2();
+                        break;
+                    case "LV3":
+                        details_price.setText(AmountUtils.formatMoney(projectDB.getV3()));
+                        ys_price = projectDB.getV3();
+                        break;
+                    case "LV4":
+                        details_price.setText(AmountUtils.formatMoney(projectDB.getV4()));
+                        ys_price = projectDB.getV4();
+                        break;
+                }
             }
         });
 
@@ -221,14 +245,14 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 UserDB userDB = userDBList.get(position);
-                if (userDB.isCheck()){
+                if (userDB.isCheck()) {
                     userName = "";
                     userDB.setCheck(false);
-                }else {
+                } else {
                     for (int i = 0; i < userDBList.size(); i++) {
-                        if (i == position){
+                        if (i == position) {
                             userDBList.get(i).setCheck(true);
-                        }else {
+                        } else {
                             userDBList.get(i).setCheck(false);
                         }
                     }
@@ -240,7 +264,7 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
         });
     }
 
-    private String getOrderId(){
+    private String getOrderId() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
         String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
         return date;

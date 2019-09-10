@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_width="400dp"
     android:layout_height="400dp">
@@ -141,6 +141,87 @@
                 android:layout_toRightOf="@+id/tv_project_dialog_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="1px"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/tv_project_dialog_isMember"
+                android:text="会员优惠"
+                android:gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:layout_toRightOf="@+id/tv_project_dialog_isMember"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_project_dialog"
+                    android:layout_centerInParent="true"
+                    app:thumbTint="@color/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rel_switch"
+            android:visibility="gone"
+            android:layout_marginTop="1px"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/v1_price"
+                    android:background="@drawable/edit_bg"
+                    android:hint="VIP_1"
+                    android:inputType="number|numberDecimal"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/v2_price"
+                    android:background="@drawable/edit_bg"
+                    android:hint="VIP_2"
+                    android:inputType="number|numberDecimal"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/v3_price"
+                    android:background="@drawable/edit_bg"
+                    android:hint="VIP_3"
+                    android:inputType="number|numberDecimal"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/v4_price"
+                    android:background="@drawable/edit_bg"
+                    android:hint="VIP_4"
+                    android:inputType="number|numberDecimal"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout

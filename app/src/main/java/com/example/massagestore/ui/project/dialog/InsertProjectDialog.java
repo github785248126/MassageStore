@@ -2,10 +2,15 @@ package com.example.massagestore.ui.project.dialog;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
 import com.example.massagestore.R;
 import com.example.massagestore.base.BaseDialog;
 import com.example.massagestore.dao.DaoMaster;
@@ -17,9 +22,6 @@ import com.example.massagestore.util.AmountEditText;
 import com.example.massagestore.util.EventBusUtil;
 import com.example.massagestore.eventbus.EventMessage;
 import com.example.massagestore.util.ToastUtils;
-
-import org.greenrobot.greendao.query.QueryBuilder;
-
 import java.util.List;
 
 /**
@@ -27,7 +29,6 @@ import java.util.List;
  */
 
 public class InsertProjectDialog extends BaseDialog implements View.OnClickListener{
-
     private ImageView back;
     private ImageView save;
     private EditText editName;
@@ -35,6 +36,12 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
     private AmountEditText editCommission;
     private EditText editTime;
     private EditText editRemarks;
+    private SwitchCompat switchCompat;
+    private EditText editV1;
+    private EditText editV2;
+    private EditText editV3;
+    private EditText editV4;
+    private RelativeLayout relSwitch;
     private ProjectDBDao projectDBDao;
     private Context context;
 
@@ -63,9 +70,26 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
         editCommission = findViewById(R.id.edit_project_dialog_commission);
         editTime = findViewById(R.id.edit_project_dialog_time);
         editRemarks = findViewById(R.id.edit_project_dialog_remarks);
+        switchCompat = findViewById(R.id.switch_project_dialog);
+        relSwitch = findViewById(R.id.rel_switch);
+        editV1 = findViewById(R.id.v1_price);
+        editV2 = findViewById(R.id.v2_price);
+        editV3 = findViewById(R.id.v3_price);
+        editV4 = findViewById(R.id.v4_price);
 
         back.setOnClickListener(this);
         save.setOnClickListener(this);
+
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    relSwitch.setVisibility(View.VISIBLE);
+                }else {
+                    relSwitch.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -96,7 +120,11 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
                     if (null != queryBuilder && queryBuilder.size() > 0){
                         ToastUtils.showTextLong("项目名称已存在");
                     }else {
-                        projectDBDao.insert(new ProjectDB(null,name,price,time,commission,remarks));
+                        String v1 = editV1.getText().toString();
+                        String v2 = editV2.getText().toString();
+                        String v3 = editV3.getText().toString();
+                        String v4 = editV4.getText().toString();
+                        projectDBDao.insert(new ProjectDB(null,name,price,time,commission,remarks,v1,v2,v3,v4));
                         EventBusUtil.sendStickyEvent(new EventMessage(EventCode.ProjectListFragment_UPDATE));
                         ToastUtils.showTextLong("保存成功");
                         dismiss();

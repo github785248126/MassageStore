@@ -29,7 +29,6 @@ import java.util.List;
 public class ProjectListFragment extends BaseFragment implements View.OnClickListener{
     private RecyclerView recycleProject;
     private Button btInsert;
-    private List<ProjectDB> list;
     private ProjectAdapter projectAdapter;
     private ProjectDBDao projectDBDao;
 
@@ -50,19 +49,18 @@ public class ProjectListFragment extends BaseFragment implements View.OnClickLis
     private void initDataBase() {
         DaoSession daoSession = DaoMaster.newDevSession(getContext(), ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
-        list = projectDBDao.loadAll();
     }
 
     private void initRecycle() {
         recycleProject.setLayoutManager(new GridLayoutManager(getContext(),4));
-        projectAdapter = new ProjectAdapter(R.layout.item_project,list);
+        projectAdapter = new ProjectAdapter(R.layout.item_project,projectDBDao.loadAll());
         recycleProject.setAdapter(projectAdapter);
 
         projectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 //  编辑项目
-                new UpdataProjectDialog(getContext(),list.get(position)).show();
+                new UpdataProjectDialog(getContext(),projectDBDao.loadAll().get(position)).show();
             }
         });
 
@@ -72,8 +70,7 @@ public class ProjectListFragment extends BaseFragment implements View.OnClickLis
                 AlertDialogUtils.getSingle().dialogMessage(getContext(), "是否删除该项目！", new AlertDialogUtils.DialogClickListener() {
                     @Override
                     public void onPositiveListener(DialogInterface dialog) {
-                        projectDBDao.delete(list.get(position));
-                        list.remove(position);
+                        projectDBDao.delete(projectDBDao.loadAll().get(position));
                         projectAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
