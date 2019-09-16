@@ -1,15 +1,14 @@
 package com.example.massagestore.ui;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.example.massagestore.R;
 import com.example.massagestore.adapter.OrderAdapter;
 import com.example.massagestore.base.BaseActivity;
 import com.example.massagestore.dao.DaoMaster;
 import com.example.massagestore.dao.DaoSession;
-import com.example.massagestore.dao.MemberDBDao;
 import com.example.massagestore.dao.OrderDBDao;
 
 /**

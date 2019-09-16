@@ -30,10 +30,11 @@ public class ProjectDBDao extends AbstractDao<ProjectDB, Long> {
         public final static Property Time = new Property(3, String.class, "time", false, "TIME");
         public final static Property Commission = new Property(4, String.class, "commission", false, "COMMISSION");
         public final static Property Remarks = new Property(5, String.class, "remarks", false, "REMARKS");
-        public final static Property V1 = new Property(6, String.class, "v1", false, "V1");
-        public final static Property V2 = new Property(7, String.class, "v2", false, "V2");
-        public final static Property V3 = new Property(8, String.class, "v3", false, "V3");
-        public final static Property V4 = new Property(9, String.class, "v4", false, "V4");
+        public final static Property IsMember = new Property(6, String.class, "isMember", false, "IS_MEMBER");
+        public final static Property V1 = new Property(7, String.class, "v1", false, "V1");
+        public final static Property V2 = new Property(8, String.class, "v2", false, "V2");
+        public final static Property V3 = new Property(9, String.class, "v3", false, "V3");
+        public final static Property V4 = new Property(10, String.class, "v4", false, "V4");
     }
 
 
@@ -55,10 +56,11 @@ public class ProjectDBDao extends AbstractDao<ProjectDB, Long> {
                 "\"TIME\" TEXT," + // 3: time
                 "\"COMMISSION\" TEXT," + // 4: commission
                 "\"REMARKS\" TEXT," + // 5: remarks
-                "\"V1\" TEXT," + // 6: v1
-                "\"V2\" TEXT," + // 7: v2
-                "\"V3\" TEXT," + // 8: v3
-                "\"V4\" TEXT);"); // 9: v4
+                "\"IS_MEMBER\" TEXT," + // 6: isMember
+                "\"V1\" TEXT," + // 7: v1
+                "\"V2\" TEXT," + // 8: v2
+                "\"V3\" TEXT," + // 9: v3
+                "\"V4\" TEXT);"); // 10: v4
     }
 
     /** Drops the underlying database table. */
@@ -101,24 +103,29 @@ public class ProjectDBDao extends AbstractDao<ProjectDB, Long> {
             stmt.bindString(6, remarks);
         }
  
+        String isMember = entity.getIsMember();
+        if (isMember != null) {
+            stmt.bindString(7, isMember);
+        }
+ 
         String v1 = entity.getV1();
         if (v1 != null) {
-            stmt.bindString(7, v1);
+            stmt.bindString(8, v1);
         }
  
         String v2 = entity.getV2();
         if (v2 != null) {
-            stmt.bindString(8, v2);
+            stmt.bindString(9, v2);
         }
  
         String v3 = entity.getV3();
         if (v3 != null) {
-            stmt.bindString(9, v3);
+            stmt.bindString(10, v3);
         }
  
         String v4 = entity.getV4();
         if (v4 != null) {
-            stmt.bindString(10, v4);
+            stmt.bindString(11, v4);
         }
     }
 
@@ -156,24 +163,29 @@ public class ProjectDBDao extends AbstractDao<ProjectDB, Long> {
             stmt.bindString(6, remarks);
         }
  
+        String isMember = entity.getIsMember();
+        if (isMember != null) {
+            stmt.bindString(7, isMember);
+        }
+ 
         String v1 = entity.getV1();
         if (v1 != null) {
-            stmt.bindString(7, v1);
+            stmt.bindString(8, v1);
         }
  
         String v2 = entity.getV2();
         if (v2 != null) {
-            stmt.bindString(8, v2);
+            stmt.bindString(9, v2);
         }
  
         String v3 = entity.getV3();
         if (v3 != null) {
-            stmt.bindString(9, v3);
+            stmt.bindString(10, v3);
         }
  
         String v4 = entity.getV4();
         if (v4 != null) {
-            stmt.bindString(10, v4);
+            stmt.bindString(11, v4);
         }
     }
 
@@ -191,10 +203,11 @@ public class ProjectDBDao extends AbstractDao<ProjectDB, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // time
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // commission
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // remarks
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // v1
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // v2
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // v3
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // v4
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // isMember
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // v1
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // v2
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // v3
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // v4
         );
         return entity;
     }
@@ -207,10 +220,11 @@ public class ProjectDBDao extends AbstractDao<ProjectDB, Long> {
         entity.setTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCommission(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setRemarks(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setV1(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setV2(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setV3(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setV4(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setIsMember(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setV1(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setV2(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setV3(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setV4(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
      }
     
     @Override

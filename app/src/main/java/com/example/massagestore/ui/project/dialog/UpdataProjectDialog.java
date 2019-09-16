@@ -4,11 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.example.massagestore.R;
 import com.example.massagestore.base.BaseDialog;
 import com.example.massagestore.dao.DaoMaster;
@@ -21,12 +22,9 @@ import com.example.massagestore.util.AmountEditText;
 import com.example.massagestore.util.EventBusUtil;
 import com.example.massagestore.util.ToastUtils;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
 /**
  * Created by 老表 on 2019/8/31.
  */
-
 public class UpdataProjectDialog extends BaseDialog implements View.OnClickListener {
     private ImageView back;
     private ImageView save;
@@ -43,6 +41,7 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
     private EditText editV4;
     private RelativeLayout relSwitch;
     private SwitchCompat switchCompat;
+    private String isMember;
     private Context context;
 
     public UpdataProjectDialog(@NonNull Context context, ProjectDB projectDB) {
@@ -55,6 +54,7 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
     protected void init() {
         DaoSession daoSession = DaoMaster.newDevSession(context, ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
+        isMember = projectDB.getIsMember();
 
         editName.setText(projectDB.getName());
         editPrice.setText(projectDB.getPrice());
@@ -66,10 +66,10 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
         String v3 = projectDB.getV3();
         String v4 = projectDB.getV4();
 
-        if (TextUtils.isEmpty(v1) && TextUtils.isEmpty(v2) && TextUtils.isEmpty(v3) && TextUtils.isEmpty(v4)) {
+        if (isMember.equals("0")){
             relSwitch.setVisibility(View.GONE);
             switchCompat.setChecked(false);
-        } else {
+        }else {
             relSwitch.setVisibility(View.VISIBLE);
             switchCompat.setChecked(true);
             editV1.setText(v1);
@@ -102,6 +102,18 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
 
         back.setOnClickListener(this);
         save.setOnClickListener(this);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    isMember = "1";
+                    relSwitch.setVisibility(View.VISIBLE);
+                }else {
+                    isMember = "0";
+                    relSwitch.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -127,14 +139,16 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
                     projectDB.setPrice(price);
                     projectDB.setCommission(commission);
                     projectDB.setTime(time);
+                    projectDB.setIsMember(isMember);
                     projectDB.setRemarks(editRemarks.getText().toString());
                     projectDB.setV1(editV1.getText().toString());
                     projectDB.setV2(editV2.getText().toString());
                     projectDB.setV3(editV3.getText().toString());
                     projectDB.setV4(editV4.getText().toString());
 
-                    projectDBDao.update(projectDB);
-
+                    Log.e("--->>>",projectDB.toString());
+                    projectDBDao.insertOrReplace(projectDB);
+                    Log.e("--->>>>>",projectDBDao.loadAll().toString());
                     EventBusUtil.sendStickyEvent(new EventMessage(EventCode.ProjectListFragment_UPDATE));
                     ToastUtils.showTextLong("修改成功");
                     dismiss();

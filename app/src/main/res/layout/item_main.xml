@@ -42,7 +42,6 @@
         <TextView
             android:id="@+id/remarks"
             android:gravity="center"
-            android:text="128/98/58"
             android:textColor="@color/white"
             android:layout_weight="1"
             android:layout_width="0dp"

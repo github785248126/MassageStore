@@ -170,9 +170,15 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
                 } else if (TextUtils.isEmpty(projectPrice)) {
                     ToastUtils.showTextLong("金额不能为空");
                 } else {
-                    Log.e("--------->>>",new OrderDB(null, getOrderId(), projectName, projectMember, userName, ys_price, AmountUtils.formatMoney(projectPrice)).toString());
-                    orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName, ys_price, AmountUtils.formatMoney(projectPrice)));
+                    if (TextUtils.isEmpty(projectName)){
+                        Log.e("--------->>>",new OrderDB(null, getOrderId(), projectName, projectMember, userName,"", ys_price, AmountUtils.formatMoney(projectPrice)).toString());
+                        orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName,"", ys_price, AmountUtils.formatMoney(projectPrice)));
+                    }else {
+                        Log.e("--------->>>",new OrderDB(null, getOrderId(), projectName, projectMember, userName,projectDB.getCommission(), ys_price, AmountUtils.formatMoney(projectPrice)).toString());
+                        orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName,projectDB.getCommission(), ys_price, AmountUtils.formatMoney(projectPrice)));
+                    }
                     ToastUtils.showTextLong("订单已保存");
+                    dismiss();
                 }
                 break;
         }

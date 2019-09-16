@@ -57,6 +57,9 @@ public class UpdataUserDialog extends BaseDialog implements View.OnClickListener
 
         back.setOnClickListener(this);
         save.setOnClickListener(this);
+
+        editName.setText(userDB.getName());
+        editPhone.setText(userDB.getPhone());
     }
 
     @Override

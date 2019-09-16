@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.massagestore.R;
 import com.example.massagestore.adapter.MainAdapter;
 import com.example.massagestore.base.BaseActivity;
+import com.example.massagestore.base.BaseApplication;
 import com.example.massagestore.dao.DaoMaster;
 import com.example.massagestore.dao.DaoSession;
 import com.example.massagestore.dao.ProjectDBDao;
@@ -34,6 +35,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private MainAdapter mainAdapter;
     private List<ProjectDB> projectDBList = new ArrayList<>();
     private ProjectDBDao projectDBDao;
+    private DaoSession daoSession;
 
     @Override
     protected void init() {
@@ -52,7 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initData() {
-        DaoSession daoSession = DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME);
+        daoSession = DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
         if (null == projectDBList || projectDBList.size() == 0){
             projectDBList.addAll(projectDBDao.loadAll());
@@ -125,9 +127,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void updata(){
-        projectDBList.clear();
-        projectDBList.addAll(projectDBDao.loadAll());
-        mainAdapter.notifyDataSetChanged();
+        mainAdapter.setNewData(DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME).getProjectDBDao().loadAll());
     }
 
     private void jumpActivity(Class cls) {

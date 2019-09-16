@@ -20,6 +20,7 @@ import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.eventbus.EventCode;
 import com.example.massagestore.eventbus.EventMessage;
 import com.example.massagestore.ui.member.dialog.InsertMemberDialog;
+import com.example.massagestore.ui.member.dialog.UpdataMemberDialog;
 import com.example.massagestore.ui.project.dialog.UpdataProjectDialog;
 import com.example.massagestore.util.AlertDialogUtils;
 
@@ -78,7 +79,7 @@ public class MemberFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 //  编辑项目
-
+            new UpdataMemberDialog(getContext(),list.get(position)).show();
             }
         });
 

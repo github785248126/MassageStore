@@ -43,6 +43,7 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
     private EditText editV4;
     private RelativeLayout relSwitch;
     private ProjectDBDao projectDBDao;
+    private String isMember = "0";
     private Context context;
 
     public InsertProjectDialog(@NonNull Context context) {
@@ -84,8 +85,10 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    isMember = "0";
                     relSwitch.setVisibility(View.VISIBLE);
                 }else {
+                    isMember = "1";
                     relSwitch.setVisibility(View.GONE);
                 }
             }
@@ -124,7 +127,7 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
                         String v2 = editV2.getText().toString();
                         String v3 = editV3.getText().toString();
                         String v4 = editV4.getText().toString();
-                        projectDBDao.insert(new ProjectDB(null,name,price,time,commission,remarks,v1,v2,v3,v4));
+                        projectDBDao.insert(new ProjectDB(null,name,price,time,commission,remarks,isMember,v1,v2,v3,v4));
                         EventBusUtil.sendStickyEvent(new EventMessage(EventCode.ProjectListFragment_UPDATE));
                         ToastUtils.showTextLong("保存成功");
                         dismiss();

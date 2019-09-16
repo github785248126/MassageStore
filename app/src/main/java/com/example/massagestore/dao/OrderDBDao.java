@@ -29,8 +29,9 @@ public class OrderDBDao extends AbstractDao<OrderDB, Long> {
         public final static Property Project = new Property(2, String.class, "project", false, "PROJECT");
         public final static Property Member = new Property(3, String.class, "member", false, "MEMBER");
         public final static Property User = new Property(4, String.class, "user", false, "USER");
-        public final static Property Yf_price = new Property(5, String.class, "yf_price", false, "YF_PRICE");
-        public final static Property Sf_price = new Property(6, String.class, "sf_price", false, "SF_PRICE");
+        public final static Property Commission = new Property(5, String.class, "commission", false, "COMMISSION");
+        public final static Property Yf_price = new Property(6, String.class, "yf_price", false, "YF_PRICE");
+        public final static Property Sf_price = new Property(7, String.class, "sf_price", false, "SF_PRICE");
     }
 
 
@@ -51,8 +52,9 @@ public class OrderDBDao extends AbstractDao<OrderDB, Long> {
                 "\"PROJECT\" TEXT," + // 2: project
                 "\"MEMBER\" TEXT," + // 3: member
                 "\"USER\" TEXT," + // 4: user
-                "\"YF_PRICE\" TEXT," + // 5: yf_price
-                "\"SF_PRICE\" TEXT);"); // 6: sf_price
+                "\"COMMISSION\" TEXT," + // 5: commission
+                "\"YF_PRICE\" TEXT," + // 6: yf_price
+                "\"SF_PRICE\" TEXT);"); // 7: sf_price
     }
 
     /** Drops the underlying database table. */
@@ -90,14 +92,19 @@ public class OrderDBDao extends AbstractDao<OrderDB, Long> {
             stmt.bindString(5, user);
         }
  
+        String commission = entity.getCommission();
+        if (commission != null) {
+            stmt.bindString(6, commission);
+        }
+ 
         String yf_price = entity.getYf_price();
         if (yf_price != null) {
-            stmt.bindString(6, yf_price);
+            stmt.bindString(7, yf_price);
         }
  
         String sf_price = entity.getSf_price();
         if (sf_price != null) {
-            stmt.bindString(7, sf_price);
+            stmt.bindString(8, sf_price);
         }
     }
 
@@ -130,14 +137,19 @@ public class OrderDBDao extends AbstractDao<OrderDB, Long> {
             stmt.bindString(5, user);
         }
  
+        String commission = entity.getCommission();
+        if (commission != null) {
+            stmt.bindString(6, commission);
+        }
+ 
         String yf_price = entity.getYf_price();
         if (yf_price != null) {
-            stmt.bindString(6, yf_price);
+            stmt.bindString(7, yf_price);
         }
  
         String sf_price = entity.getSf_price();
         if (sf_price != null) {
-            stmt.bindString(7, sf_price);
+            stmt.bindString(8, sf_price);
         }
     }
 
@@ -154,8 +166,9 @@ public class OrderDBDao extends AbstractDao<OrderDB, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // project
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // member
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // user
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // yf_price
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // sf_price
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // commission
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // yf_price
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // sf_price
         );
         return entity;
     }
@@ -167,8 +180,9 @@ public class OrderDBDao extends AbstractDao<OrderDB, Long> {
         entity.setProject(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setMember(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setUser(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setYf_price(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setSf_price(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCommission(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setYf_price(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setSf_price(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override
