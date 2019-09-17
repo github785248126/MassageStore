@@ -31,9 +31,8 @@ import com.example.massagestore.dao.entity.OrderDB;
 import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.dao.entity.UserDB;
 import com.example.massagestore.util.AmountUtils;
+import com.example.massagestore.util.MathUtils;
 import com.example.massagestore.util.ToastUtils;
-
-import org.greenrobot.eventbus.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,6 +71,7 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
     private String userName = null;
     private OrderDBDao orderDBDao;
     private String ys_price;
+    private MemberDB memberDB;
 
     public DetailsDialog(@NonNull Context context, ProjectDB projectDB) {
         super(context);
@@ -81,7 +81,6 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     protected void init() {
-        details_price.setCursorVisible(false);
         details_name.setText(projectDB.getName());
         details_time.setText(projectDB.getTime() + "分钟");
         details_price.setText(AmountUtils.formatMoney(projectDB.getPrice()));
@@ -152,6 +151,7 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
             case R.id.button1_details:  //  散客
                 isMember = "0";
                 relMember.setVisibility(View.GONE);
+                details_member.setText("");
                 break;
             case R.id.button2_details:  //  会员
                 isMember = "1";
@@ -170,12 +170,26 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
                 } else if (TextUtils.isEmpty(projectPrice)) {
                     ToastUtils.showTextLong("金额不能为空");
                 } else {
-                    if (TextUtils.isEmpty(projectName)){
-                        Log.e("--------->>>",new OrderDB(null, getOrderId(), projectName, projectMember, userName,"", ys_price, AmountUtils.formatMoney(projectPrice)).toString());
-                        orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName,"", ys_price, AmountUtils.formatMoney(projectPrice)));
-                    }else {
-                        Log.e("--------->>>",new OrderDB(null, getOrderId(), projectName, projectMember, userName,projectDB.getCommission(), ys_price, AmountUtils.formatMoney(projectPrice)).toString());
-                        orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName,projectDB.getCommission(), ys_price, AmountUtils.formatMoney(projectPrice)));
+                    if (!TextUtils.isEmpty(projectMember) && isMember.equals("1")) {
+                        if (projectPrice.contains("￥")) {
+                            projectPrice = projectPrice.substring(1);
+                        }
+                        String subtractBigDecimal = MathUtils.getInstance().getSubtractBigDecimal(memberDB.getPrice(), projectPrice);
+                        if (subtractBigDecimal.contains("-")) {
+                            ToastUtils.showTextLong("会员余额不足");
+                            return;
+                        } else {
+                            memberDB.setPrice(subtractBigDecimal);
+                            memberDBDao.update(memberDB);
+                        }
+                    }
+
+                    if (TextUtils.isEmpty(userName)) {
+                        Log.e("--------->>>", new OrderDB(null, getOrderId(), projectName, projectMember, userName, "", ys_price, AmountUtils.formatMoney(projectPrice)).toString());
+                        orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName, "", ys_price, AmountUtils.formatMoney(projectPrice)));
+                    } else {
+                        Log.e("--------->>>", new OrderDB(null, getOrderId(), projectName, projectMember, userName, projectDB.getCommission(), ys_price, AmountUtils.formatMoney(projectPrice)).toString());
+                        orderDBDao.insert(new OrderDB(null, getOrderId(), projectName, projectMember, userName, projectDB.getCommission(), ys_price, AmountUtils.formatMoney(projectPrice)));
                     }
                     ToastUtils.showTextLong("订单已保存");
                     dismiss();
@@ -221,12 +235,13 @@ public class DetailsDialog extends BaseDialog implements View.OnClickListener {
         memberAdapterSearch.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                memberDB = memberSearchList.get(position);
                 details_member.removeTextChangedListener(textWatcher);
-                details_member.setText(memberSearchList.get(position).getName());
+                details_member.setText(memberDB.getName());
                 details_member.addTextChangedListener(textWatcher);
                 member.setVisibility(View.GONE);
 
-                switch (memberSearchList.get(position).getLevel()){
+                switch (memberSearchList.get(position).getLevel()) {
                     case "LV1":
                         details_price.setText(AmountUtils.formatMoney(projectDB.getV1()));
                         ys_price = projectDB.getV1();

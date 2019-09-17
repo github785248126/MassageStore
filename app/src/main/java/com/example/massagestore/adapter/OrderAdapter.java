@@ -20,7 +20,7 @@ public class OrderAdapter extends BaseQuickAdapter<OrderDB, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, OrderDB item) {
-        helper.setText(R.id.id, String.valueOf(item.getId()));
+        helper.setText(R.id.id, String.valueOf(helper.getPosition()+1));
         helper.setText(R.id.orderid, item.getOrderid());
         helper.setText(R.id.name, item.getProject());
         helper.setText(R.id.t_user, item.getUser());

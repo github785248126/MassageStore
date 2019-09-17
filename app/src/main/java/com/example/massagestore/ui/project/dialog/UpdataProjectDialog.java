@@ -54,8 +54,8 @@ public class UpdataProjectDialog extends BaseDialog implements View.OnClickListe
     protected void init() {
         DaoSession daoSession = DaoMaster.newDevSession(context, ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
-        isMember = projectDB.getIsMember();
 
+        isMember = projectDB.getIsMember();
         editName.setText(projectDB.getName());
         editPrice.setText(projectDB.getPrice());
         editTime.setText(projectDB.getTime());

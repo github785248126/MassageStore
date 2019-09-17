@@ -3,7 +3,6 @@ package com.example.massagestore.ui.main;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -12,17 +11,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.massagestore.R;
 import com.example.massagestore.adapter.MainAdapter;
 import com.example.massagestore.base.BaseActivity;
-import com.example.massagestore.base.BaseApplication;
 import com.example.massagestore.dao.DaoMaster;
 import com.example.massagestore.dao.DaoSession;
 import com.example.massagestore.dao.ProjectDBDao;
-import com.example.massagestore.dao.entity.ProjectDB;
 import com.example.massagestore.ui.OrderActivity;
 import com.example.massagestore.ui.user.activity.UserActivity;
 import com.example.massagestore.ui.member.activity.MemberActivity;
 import com.example.massagestore.ui.project.activity.ProjectActivity;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.massagestore.util.ToastUtils;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView menu;
@@ -33,9 +29,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RadioButton rbOrder;
     private RadioGroup radioGroup;
     private MainAdapter mainAdapter;
-    private List<ProjectDB> projectDBList = new ArrayList<>();
     private ProjectDBDao projectDBDao;
     private DaoSession daoSession;
+    private long mPressedTime;
 
     @Override
     protected void init() {
@@ -48,7 +44,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mainAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                new DetailsDialog(MainActivity.this,projectDBList.get(position)).show();
+                new DetailsDialog(MainActivity.this, projectDBDao.loadAll().get(position)).show();
             }
         });
     }
@@ -56,14 +52,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initData() {
         daoSession = DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME);
         projectDBDao = daoSession.getProjectDBDao();
-        if (null == projectDBList || projectDBList.size() == 0){
-            projectDBList.addAll(projectDBDao.loadAll());
-        }
     }
 
     private void initRecycle() {
         recycleCommodity.setLayoutManager(new LinearLayoutManager(this));
-        mainAdapter = new MainAdapter(R.layout.item_main,projectDBList);
+        mainAdapter = new MainAdapter(R.layout.item_main, projectDBDao.loadAll());
         recycleCommodity.setAdapter(mainAdapter);
     }
 
@@ -121,13 +114,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if (null != mainAdapter){
-            updata();
+        if (null != mainAdapter) {
+            mainAdapter.setNewData(DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME).getProjectDBDao().loadAll());
         }
     }
 
-    private void updata(){
-        mainAdapter.setNewData(DaoMaster.newDevSession(MainActivity.this, ProjectDBDao.TABLENAME).getProjectDBDao().loadAll());
+    @Override
+    public void onBackPressed() {
+        if (radioGroup.getVisibility() == View.VISIBLE){
+            radioGroup.setVisibility(View.GONE);
+        }
+
+        //  获取第一次按键时间
+        long mNowTime = System.currentTimeMillis();
+        //  比较两次按键时间差
+        if ((mNowTime - mPressedTime) > 2000) {
+            ToastUtils.showTextShort("再按一次退出程序");
+            mPressedTime = mNowTime;
+        } else {//退出程序
+            this.finish();
+            System.exit(0);
+        }
     }
 
     private void jumpActivity(Class cls) {

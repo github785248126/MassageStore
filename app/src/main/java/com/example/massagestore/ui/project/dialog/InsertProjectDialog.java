@@ -4,13 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.example.massagestore.R;
 import com.example.massagestore.base.BaseDialog;
 import com.example.massagestore.dao.DaoMaster;
@@ -85,10 +83,10 @@ public class InsertProjectDialog extends BaseDialog implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    isMember = "0";
+                    isMember = "1";
                     relSwitch.setVisibility(View.VISIBLE);
                 }else {
-                    isMember = "1";
+                    isMember = "0";
                     relSwitch.setVisibility(View.GONE);
                 }
             }
